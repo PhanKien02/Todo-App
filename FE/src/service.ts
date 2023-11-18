@@ -11,8 +11,7 @@ class Service {
                     size: size,
                 },
             });
-            const { tasks, totalItem } = res.data.result;
-            return { tasks, totalItem };
+            return res.data.result;
         } catch (err) {
             console.log(err);
             return [];
@@ -21,7 +20,7 @@ class Service {
     public async saveTask(task: ITask) {
         try {
             const res = await Request.post<IResponse>("/task/save", task);
-            return res.data;
+            return res.data
         } catch (error) {
             console.log(error);
         }

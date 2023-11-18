@@ -3,6 +3,7 @@ import express from 'express';
 import morgan from "morgan";
 import dotenv from  "dotenv"
 import connectDB from "./configs/database"
+require('express-async-errors');
 import bodyParser from "body-parser";
 import cors from 'cors';
 import ApiRouter from './router/router';

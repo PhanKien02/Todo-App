@@ -13,7 +13,7 @@ class TaskService {
                 .limit(size);
             return { tasks, totalItem };
         } catch (error) {
-            console.log("error");
+            throw new ApiError(400,"get all task failed");
         }
     };
     public saveTask = async (task: ITask) => {
@@ -28,8 +28,8 @@ class TaskService {
                 const res = await this.taskMode.create(task);
                 return res;
             }
-        } catch (error) {            
-            return new ApiError(400,"save task failed");
+        } catch (error) {   
+            throw new ApiError(400,"save task failed");
         }
     };
     public setStatusTask = async (idTask: String) => {

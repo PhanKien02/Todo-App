@@ -1,5 +1,6 @@
 export interface IResponse {
     success : boolean,
     result : any,
-    message : string
+    message : string,
+    error : boolean
 }

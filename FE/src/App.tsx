@@ -12,6 +12,7 @@ import { FiXOctagon } from "react-icons/fi";
 import { Pagination } from "antd";
 import { Slide, toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+
 function App() {
     const [listTask, setListTask] = useState<ITask[]>([]);
     const [listUser, setListUser] = useState<IUser[]>([]);
@@ -25,6 +26,7 @@ function App() {
     const [search, setSearch] = useState(" ");
     const [page, setPage] = useState(1);
     const [totalItem, setTotalItem] = useState(1);
+    //* get all user and task
     const fetchData = async () => {
         await service
             .getAllTask({ page, size: 3 })
@@ -34,7 +36,7 @@ function App() {
                     setTotalItem(totalItem);
                 }
             }).catch(()=>{
-                toast.error("get task faild !", {
+                toast.error("get task failed !", {
                     position: toast.POSITION.TOP_RIGHT,
                     autoClose: 1000,
                     theme : "colored"
@@ -43,6 +45,11 @@ function App() {
         await service.getAllUser().then((data) => {
             setListUser(data);
         }).catch(()=>{
+            toast.error("get user failed !", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 1000,
+                theme : "colored"
+            });
         });
     };
     useEffect(() => {
@@ -68,14 +75,15 @@ function App() {
         event.preventDefault();
         await service.saveTask(task).then(() => {
             fetchData();
-            resetFrom();
+            resetFrom();  
             toast.success("save task success !", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
-                theme : "colored"
-            });
-        }).catch(()=>{
+                theme : "colored"});
+        }).catch((error)=>{
+            console.log(error);
+            
             toast.error("save task failed !", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
@@ -87,16 +95,18 @@ function App() {
     const onchangeSearchValue = (event: any) => {
         setSearch(event.target.value);
     };
+    // * submit search by title
     const handelSearch = async (event: any) => {
         event.preventDefault();
         console.log(search);
         
         if (search=='') {
             await fetchData();
+            setSearch("s ");
         } else {
             await service.findByTitle(search).then((data) => {
                 setListTask(data);
-                setSearch('');
+                setSearch("a");
             });
         }
     };
@@ -124,6 +134,13 @@ function App() {
         await service.deleteTask(id).then(()=>{
             fetchData();
             toast.success("delete task success !", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 1000,
+                transition: Slide,
+                theme : "colored"
+            });
+        }).catch(()=>{
+            toast.error("delete task failed !", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
