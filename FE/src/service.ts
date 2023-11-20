@@ -22,7 +22,7 @@ class Service {
             const res = await Request.post<IResponse>("/task/save", task);
             return res.data
         } catch (error) {
-            console.log(error);
+            return await Promise.reject(error);
         }
     }
     public async getAllUser() {
@@ -48,7 +48,9 @@ class Service {
                     id: _id,
                 },
             });
-        } catch (error) {}
+        } catch (error) {
+            return await Promise.reject(error);
+        }
     }
     public async deleteTask (_id:string){
         try {
@@ -58,7 +60,7 @@ class Service {
                 }
             })
         } catch (error) {
-            
+            return await Promise.reject(error)
         }
     }
 }

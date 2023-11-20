@@ -1,6 +1,7 @@
 import { ITask } from "../interface/ITask";
 import TaskModel from "../models/TaskModel";
 import { ApiError } from "../utils/ApiError";
+import ApiResponse from "../utils/ApiResponse";
 
 class TaskService {
     private taskMode = TaskModel;
@@ -35,16 +36,22 @@ class TaskService {
     public setStatusTask = async (idTask: String) => {
         const check = await this.taskMode.findById(idTask);
         if (!check) throw new ApiError(400, "task not found");
+        console.log(check.assignee);
+        
         if (check?.status)
             return await this.taskMode.updateOne(
                 { _id: idTask },
                 { $set: { status: false } }
             );
         else
-            return await this.taskMode.updateOne(
-                { _id: idTask },
-                { $set: { status: true } }
-            );
+            {
+                if(!check.assignee)
+                    throw new ApiError(400,"task chưa được giao");
+                return await this.taskMode.updateOne(
+                    { _id: idTask },
+                    { $set: { status: true } }
+                );
+            }
     };
     public findByTitle = async (title: String) => {
         const task = await this.taskMode.find({ title: { $regex: title } });
@@ -53,8 +60,14 @@ class TaskService {
     public deleteTask = async (id: String) => {
         const check = await this.taskMode.findById(id);
         if(check)
-            return await this.taskMode.deleteOne({_id:id});
-        else throw new ApiError(400, "task not found"); 
+            {
+                if(check.status)
+                        return await this.taskMode.deleteOne({_id:id});
+                else
+                    throw new ApiError(400, "task chưa hoàn thành");
+            }
+        else
+            throw new ApiError(400, "task not found"); 
     };
 }
 const taskService = new TaskService();

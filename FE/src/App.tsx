@@ -76,15 +76,13 @@ function App() {
         await service.saveTask(task).then(() => {
             fetchData();
             resetFrom();  
-            toast.success("save task success !", {
+            toast.success("lưu task thành công !", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
                 theme : "colored"});
-        }).catch((error)=>{
-            console.log(error);
-            
-            toast.error("save task failed !", {
+        }).catch(()=>{
+            toast.error("task đã được giao!", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
@@ -122,7 +120,14 @@ function App() {
     const setStatusTask =async (id:any)=>{
         await service.setStatusTask(id).then(()=>{
             fetchData();
-            toast.success("change status success !", {
+            toast.success("thay đổi trạng thái task thành công!", {
+                position: toast.POSITION.TOP_RIGHT,
+                autoClose: 1000,
+                transition: Slide,
+                theme : "colored"
+            });
+        }).catch(()=>{
+            toast.error("task chưa được giao", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
@@ -133,14 +138,14 @@ function App() {
     const deleteTask = async (id:any)=>{
         await service.deleteTask(id).then(()=>{
             fetchData();
-            toast.success("delete task success !", {
+            toast.success("xóa task thành công!", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
                 theme : "colored"
             });
         }).catch(()=>{
-            toast.error("delete task failed !", {
+            toast.error("task chưa hoàn thành không thể xóa bỏ!", {
                 position: toast.POSITION.TOP_RIGHT,
                 autoClose: 1000,
                 transition: Slide,
