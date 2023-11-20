@@ -100,11 +100,11 @@ function App() {
         
         if (search=='') {
             await fetchData();
-            setSearch("s ");
+            setSearch("");
         } else {
             await service.findByTitle(search).then((data) => {
                 setListTask(data);
-                setSearch("a");
+                setSearch("");
             });
         }
     };
@@ -167,6 +167,7 @@ function App() {
                         type="text"
                         name="search"
                         id="search"
+                        value={search}
                         placeholder="Search"
                         onChange={onchangeSearchValue}
                     />
